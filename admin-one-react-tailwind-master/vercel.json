@@ -1,0 +1,16 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "admin-one-react-tailwind-master/package.json",
+        "use": "@vercel/next"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "admin-one-react-tailwind-master/$1"
+      }
+    ]
+  }
+  
