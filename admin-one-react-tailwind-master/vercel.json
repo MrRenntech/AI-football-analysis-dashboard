@@ -1,16 +1,7 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "admin-one-react-tailwind-master/package.json",
-        "use": "@vercel/next"
-      }
-    ],
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "admin-one-react-tailwind-master/$1"
-      }
-    ]
+    "buildCommand": "bun run build",
+    "installCommand": "bun install",
+    "outputDirectory": ".next",
+    "framework": "nextjs"
   }
   
