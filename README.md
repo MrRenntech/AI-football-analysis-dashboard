@@ -17,6 +17,15 @@
 
 ---
 
+## 🎨 UI Gallery
+
+<div align="center">
+  <img src="assets/screenshots/landing_page.png" width="45%" alt="Landing Page" style="border-radius: 5px; border: 1px solid #ccc;">
+  <img src="assets/screenshots/dashboard.png" width="45%" alt="Dashboard" style="border-radius: 5px; border: 1px solid #ccc;">
+</div>
+
+---
+
 ## 🌟 Features
 
 | Feature | Description | Status |
