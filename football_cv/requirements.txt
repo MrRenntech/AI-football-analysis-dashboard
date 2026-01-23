@@ -1,0 +1,3 @@
+ultralytics      # YOLOv8 framework for training and running object detection models (detects players, ball)
+supervision      # Advanced computer vision utilities: handles ByteTrack for tracking and robust annotation tools
+opencv-python    # (cv2) Core library for video processing, reading frames, and saving output videos

@@ -1,0 +1,66 @@
+# Development Steps & Architecture Explanation
+
+This document details the step-by-step development process of the AI Football Analysis Dashboard. It explains **how** the system was built and **why** specific architectural decisions were made, allowing anyone to recreate it from scratch.
+
+---
+
+## Phase 1: The Core Computer Vision Pipeline
+**Goal**: Build a stable, offline system to detect and track players/ball in a video.
+
+### Step 1: Project Structuring
+**Why**: A clean structure prevents import errors and separates code (src), data (data), and artifacts (output).
+- Created `football_cv/` as the root module.
+- `__init__.py` files (implicitly or explicitly) allow Python to treat folders as packages.
+- **Decision**: Used a `src/` folder for logic to keep the root clean.
+
+### Step 2: Dependency Management
+**Why**: Reproducibility.
+- Created `requirements.txt` first.
+- Selected `ultralytics` for its SOTA YOLOv8 performance and ease of use.
+- Selected `supervision` because it abstracts away complex drawing and tracking logic (ByteTrack).
+- Selected `opencv-python` for robust video reading/writing.
+
+### Step 3: Video I/O Infrastructure (`video_utils.py`)
+**Why**: Before processing, we must reliably read input and write output.
+- Implemented `read_video()`: A generator function. **Why?** Generators yield one frame at a time, preventing RAM overflow on large video files.
+- Implemented `VideoWriter` context manager. **Why?** Ensures the video file is properly closed/saved even if the script crashes.
+
+### Step 4: Object Detection (`detector.py`)
+**Why**: We need to know *what* is in the frame.
+- Initialized `YOLO('yolov8x.pt')`. **Why 'x'?** The 'Extra Large' model is slower but provides the highest accuracy, which is critical for small objects like a football.
+- Filtered classes: We only care about Person (id 0) and Ball (id 32). This reduces noise.
+
+### Step 5: Object Tracking (`tracker.py`)
+**Why**: Detection is per-frame. Tracking gives identity across time (e.g., "Player #5" stays "Player #5").
+- Used `ByteTrack` (via supervision). **How it works?** It matches high-confidence detections first, then tries to associate low-confidence detections with existing tracks. This recovers players who briefly fade out.
+
+### Step 6: The Pipeline Orchestrator (`pipeline.py`)
+**Why**: We need a 'conductor' to run the show.
+- Orchestrates the loop: Read Frame -> Detect -> Track -> Annotate -> Write Frame.
+- **Key Feature**: Debug prints (`Processed frame X...`) to give user feedback during long renders.
+
+---
+
+## Phase 2A: Ball Possession Logic
+**Goal**: Determine which specific player has the ball.
+
+### Step 7: Possession Assigner (`possession_assigner.py`)
+**Why**: The raw visual data (boxes) doesn't tell us *who* plays the ball.
+- **Logic**:
+  1. Find the ball center.
+  2. Find all player centers.
+  3. Calculate Euclidean distance between Ball and every Player.
+  4. Find the closest player.
+- **Refinement 1 (Persistence)**: If the ball disappears (occlusion), the last known possessor keeps possession for `frame_persistence` frames (e.g. 10 frames). This prevents flickering.
+- **Refinement 2 (Edge Case - No Players)**: Added logic to handle cases where the ball is visible but players are missed/occluded. Possession resets if persistence is exceeded.
+- **Refinement 3 (Best Ball)**: If YOLO detects multiple "balls" (ghosts), we pick the one with the highest confidence score.
+
+### Step 8: Visual Feedback
+- Updated `pipeline.py` to draw a marker (or label) indicating possession.
+- **Why**: Visual proof is the only way to debug CV logic efficiently.
+
+---
+
+## Next Steps (Planned)
+- **Phase 2B**: Color assignment (K-Means clustering) to distinguish Teams.
+- **Phase 3**: Tactical view transformation.
