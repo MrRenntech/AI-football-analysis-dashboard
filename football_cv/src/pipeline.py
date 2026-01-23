@@ -41,6 +41,11 @@ def main():
             # Track
             tracked_detections = tracker.update_with_detections(detections)
             
+            # Guard: If no detections, write frame and continue (prevent crash)
+            if tracked_detections.tracker_id is None:
+                writer.write(frame)
+                continue
+            
             # Assign Possession
             possessing_player_id = assigner.assign(tracked_detections)
             
@@ -68,7 +73,7 @@ def main():
             if possessing_player_id is not None:
                 # Find the box for the possessing player
                 mask = tracked_detections.tracker_id == possessing_player_id
-                if any(mask):
+                if mask.any():
                     features_xyxy = tracked_detections.xyxy[mask][0]
                     # Draw a triangle marker or just distinct color?
                     # For now, let's just create a special dynamic label or color.
