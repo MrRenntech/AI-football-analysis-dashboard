@@ -5,6 +5,8 @@ __pycache__/
 *.so
 .env
 .venv
+node_modules/
+frontend/node_modules/
 env/
 venv/
 ENV/
@@ -14,6 +16,7 @@ venv.bak/
 # Project Specific
 football_cv/data/
 football_cv/output/
+football_cv/storage/
 *.pt
 *.mp4
 *.avi

@@ -1,82 +1,113 @@
-# AI Football Analysis Dashboard ⚽🚀
+<div align="center">
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Python](https://img.shields.io/badge/python-3.9%2B-blue)
-![YOLOv8](https://img.shields.io/badge/YOLOv8-Ultralytics-orange)
+# ⚽ AI Football Analysis Dashboard
 
-An end-to-end AI system to analyze football matches using Computer Vision. Detects players, referees, and the ball, tracks them across frames, assigns team colors, and estimates possession statistics.
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue?style=for-the-badge&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-Backend-green?style=for-the-badge&logo=fastapi&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-Frontend-black?style=for-the-badge&logo=next.js&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind-Design-38B2AC?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![Status](https://img.shields.io/badge/Status-Production%20Ready-success?style=for-the-badge)
 
-## ✨ Features
+**An enterprise-grade computer vision platform for tactical football analysis.**
+*Precision · Intelligence · Motion*
 
-- **Object Detection**: Uses **YOLOv8** to detecting players, referees, and the ball.
-- **Robust Tracking**: Implements **ByteTrack** for persistent player IDs even through occlusions.
-- **Smart Possession**: Calculates real-time ball possession based on player proximity and temporal smoothing.
-- **Streaming Pipeline**: Memory-efficient video processing that handles long matches without crashing.
-- **Visual Analytics**: Draws bounding boxes, IDs, and possession markers directly on the video.
+[Features](#-features) • [Quick Start](#-quick-start) • [Architecture](#-architecture) • [Documentation](#-documentation)
+
+</div>
+
+---
+
+## 🌟 Features
+
+| Feature | Description | Status |
+| :--- | :--- | :--- |
+| **🕵️ Deep Analytics** | **YOLOv8x** + **ByteTrack** for SOTA object detection & tracking. | ✅ |
+| **⚽ Possession Engine** | Logic-based algorithm with occlusion persistence (10-frame buffer). | ✅ |
+| **⚡ Physical Metrics** | Real-time **Speed (px/s)** and **Distance** calculation with smoothing. | ✅ |
+| **📊 Visual Analytics** | **Bar & Line Charts** for Possession & Distance (Audi-style design). | ✅ |
+| **👕 Team Logic** | Unsupervised **K-Means Clustering** ($k=2$) on HSV + Lab colors. | ✅ |
+| **🎨 Premium UI** | **Audi Design System** (Black/Red/White) with tailored components. | ✅ |
+| **🚀 Scalable Backend** | Asynchronous **FastAPI** server with background task queues. | ✅ |
+
+---
+
+## 🚀 Quick Start
+
+### 1. Backend (API)
+```bash
+# Install dependencies
+pip install -r football_cv/requirements.txt
+
+# Run Server (Port 8000)
+uvicorn football_cv.api.server:app --reload
+```
+
+### 2. Frontend (UI)
+```bash
+# Navigate to frontend
+cd frontend
+
+# Install Node modules
+npm install
+
+# Run Client (Port 3000)
+npm run dev
+```
+
+### 3. Usage
+-   Open **[http://localhost:3000](http://localhost:3000)**.
+-   Upload a match video (`.mp4`).
+-   Watch the system analyze possession, teams, and movement in real-time.
+
+---
 
 ## 🛠️ Architecture
 
-The project is structured into a modular Python pipeline:
+The system is engineered as a split-stack application:
 
-```
-football_cv/
-├── data/               # Input videos
-├── output/             # PROCESSED videos
-├── src/
-│   ├── detector.py     # YOLOv8 logic (Person/Ball)
-│   ├── tracker.py      # ByteTrack logic
-│   ├── video_utils.py  # Streaming Video I/O
-│   ├── possession/     # Possession logic
-│   └── pipeline.py     # Main orchestrator
-└── requirements.txt    # Dependencies
-```
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Python 3.8+
-- [FFmpeg](https://ffmpeg.org/) (optional, for video compression usually)
-
-### Installation
-
-1.  **Clone the repository**:
-    ```bash
-    git clone https://github.com/yourusername/ai-football-analysis.git
-    cd ai-football-analysis
-    ```
-
-2.  **Install dependencies**:
-    ```bash
-    pip install -r football_cv/requirements.txt
-    ```
-
-3.  **Prepare Data**:
-    Place your input video at `football_cv/data/input.mp4`.
-
-### Usage
-
-Run the main pipeline:
-
-```bash
-python football_cv/src/pipeline.py
+```mermaid
+graph LR
+    subgraph Frontend [Next.js Client]
+        UI[Upload Page]
+        Dash[Results Dashboard]
+    end
+    
+    subgraph Backend [FastAPI Server]
+        API[REST API]
+        Task[Task Manager]
+        Static[Static File Server]
+    end
+    
+    subgraph Core [Analytics Engine]
+        Pipe[Pipeline / run_analysis]
+        YOLO[YOLOv8 Detector]
+        Byte[ByteTrack]
+        KMeans[Team Assigner]
+    end
+    
+    UI -->|POST /upload| API
+    Dash -->|GET /status| API
+    API -->|Background Job| Pipe
+    Pipe -->|Uses| YOLO
+    Pipe -->|Uses| KMeans
+    Pipe -->|Writes Video| Static
+    Static -->|Stream MP4| Dash
 ```
 
-The annotated video will be saved to `football_cv/output/annotated_output.mp4`.
+---
 
-## 📈 Roadmap
+## 📚 Documentation
+Detailed guides for developers:
 
-- [x] **Phase 1**: Minimal CV Pipeline (Detection + Tracking)
-- [x] **Phase 2A**: Player-Ball Possession (Logic + Persistence + Edge Cases)
-- [ ] **Phase 2B**: Team Assignment (Color Clustering)
-- [ ] **Phase 3**: Camera Movement Stabilization
-- [ ] **Phase 4**: Perspective Transformation (Real-world distance)
-- [ ] **Phase 5**: Web Dashboard (Next.js + FastAPI)
+-   **[📖 How to Run](docs/HOW_TO_RUN.md)**: Full setup, troubleshooting, and manual CLI usage.
+-   **[🏗️ Reconstruction Guide](docs/DEVELOPMENT_STEPS.md)**: Deep dive into the algorithms and "How it was built".
+-   **[📂 Project Tree](docs/PROJECT_TREE.md)**: Map of the file structure.
 
-## 🤝 Contributing
-
-Contributions are welcome! Please open an issue or submit a pull request.
+---
 
 ## 📄 License
-
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+<div align="center">
+  <sub>Built with ❤️ by Antigravity</sub>
+</div>
