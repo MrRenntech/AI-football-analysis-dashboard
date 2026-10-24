@@ -10,12 +10,6 @@
 
 ---
 
-## 🎨 UI Gallery
-
-
-
----
-
 ## 🌟 Features
 
 | Feature | Description | Status |
