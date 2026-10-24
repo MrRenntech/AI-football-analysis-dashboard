@@ -1,14 +1,12 @@
-<div align="center">
-  <img src="assets/banner.png" alt="Banner" width="100%" />
-  
-  <br/>
-  
-  ![Python](https://img.shields.io/badge/Python-Dynamic-blue?style=for-the-badge&logo=python&logoColor=white)
-  ![License](https://img.shields.io/badge/License-Proprietary-red?style=for-the-badge)
-  ![Status](https://img.shields.io/badge/Status-Active-success?style=for-the-badge)
-</div>
+<p align="center"><img src="assets/github-banner.svg" alt="AI FOOTBALL ANALYSIS" width="100%" /></p>
 
+<h1 align="center">AI FOOTBALL ANALYSIS</h1>
 
+<p align="center">A video analytics dashboard for player tracking, possession, movement, and match insights.</p>
+
+<p align="center"><sub>Next.js · FastAPI · YOLO · ByteTrack</sub></p>
+
+---
 
 ---
 
